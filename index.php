@@ -1,5 +1,16 @@
 <?php
 require_once('config/koneksi.php');
+
+session_start();
+$button;
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+    $query = "select nama_l, username from users where username = '$username'";
+    $result = mysqli_query($koneksi, $query);
+    $data_auth = mysqli_fetch_assoc($result);
+
+    $button = "<a role=\"button\" href=\"proses_logout.php\" class=\"btn btn-outline-success\">$data_auth[nama_l]</a>";
+}
 ?>
 
 
@@ -15,7 +26,42 @@ require_once('config/koneksi.php');
 </head>
 
 <body>
-    <div class="container">
+    <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+                <?= $button ?? '<a role="button" href="login.php" class="btn btn-outline-success">Login</a>' ?>
+            </div>
+        </div>
+    </nav>
+    <main class="container">
         <h1 class="text-center">Manajemen Data Mahasiswa</h1>
         <div class="d-flex justify-content-end my-2">
             <a href="tambah.php" class="btn btn-primary">➕ Tambah</a>
@@ -64,9 +110,7 @@ require_once('config/koneksi.php');
                 </tbody>
             </table>
         </div>
-    </div>
-
-
+    </main>
 
     <!-- Modal -->
     <div class="modal fade" id="ModalHapus" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
